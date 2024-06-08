@@ -1,19 +1,30 @@
+using Base;
+using UniRx;
 using UnityEngine;
 
 namespace Common.MainGame
 {
+    /// <summary>
+    /// メインゲームシーン
+    /// </summary>
     public class MainGameScene
-        : MonoBehaviour
+        : SceneBase
     {
+        /// <summary>
+        /// プレゼンター
+        /// </summary>
         [SerializeField]
         private MainGameScenePresenter presenter;
 
         /// <summary>
         /// シーン初期化
         /// </summary>
-        private void Start()
+        protected override void InitializeScene()
         {
             presenter.Initialize();
+            presenter.OnRequestSceneChangeRx
+                .TakeUntilDestroy(this)
+                .Subscribe(ChangeScene);
         }
     }
 }

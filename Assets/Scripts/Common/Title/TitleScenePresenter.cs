@@ -1,13 +1,20 @@
+using Base;
+using Constants;
 using UniRx;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Common.Title
 {
+    /// <summary>
+    /// タイトルシーンプレゼンター
+    /// </summary>
     public class TitleScenePresenter
-        : MonoBehaviour
+        : SceneBasePresenter
     {
+        /// <summary>
+        /// スタートボタン
+        /// </summary>
         [SerializeField]
         private Button startButton;
         
@@ -20,8 +27,7 @@ namespace Common.Title
                 .TakeUntilDestroy(this)
                 .Subscribe(_ =>
                 {
-                    Debug.Log("Button Pushed");
-                    SceneManager.LoadScene("Scenes/MainGame");
+                    RequestChangeScene(SceneName.MainGame);
                 });
         }
     }
