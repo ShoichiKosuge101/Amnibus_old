@@ -1,4 +1,4 @@
-namespace Constants
+namespace Utils
 {
     /// <summary>
     /// シーン名

@@ -1,8 +1,8 @@
 using Base;
-using Constants;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace Common.MainGame
 {

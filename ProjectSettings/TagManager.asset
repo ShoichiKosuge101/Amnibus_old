@@ -12,6 +12,8 @@ TagManager:
   - Water
   - UI
   - 
+  - Character
+  - Map
   - 
   - 
   - 
@@ -23,9 +25,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Background
   - 
   - 
   - 
@@ -40,6 +40,15 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Character
+    uniqueID: 1914376833
+    locked: 0
+  - name: Map
+    uniqueID: 4231524897
+    locked: 0
+  - name: Background
+    uniqueID: 256627095
     locked: 0
   m_RenderingLayers:
   - Default

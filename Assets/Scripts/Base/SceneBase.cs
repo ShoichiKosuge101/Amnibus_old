@@ -1,6 +1,6 @@
 using System;
-using Constants;
 using UnityEngine;
+using Utils;
 
 namespace Base
 {
@@ -51,7 +51,7 @@ namespace Base
         /// </summary>
         protected virtual void InitializeScene()
         {
-            Debug.Log("InitializeScene" + GetType().Name);
+            UnityEngine.Debug.Log("InitializeScene" + GetType().Name);
         }
         
         /// <summary>
@@ -69,7 +69,7 @@ namespace Base
         protected virtual void CleanupScene()
         {
             // ここに共通のクリーンアップロジックを記述
-            Debug.Log("CleanupScene" + GetType().Name);
+            UnityEngine.Debug.Log("CleanupScene" + GetType().Name);
         }
     }
 }
