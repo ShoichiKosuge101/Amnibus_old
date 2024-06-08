@@ -1,4 +1,5 @@
 using System;
+using Manager;
 using UnityEngine;
 
 namespace Player
@@ -35,11 +36,15 @@ namespace Player
             switch (_currentState)
             {
                 case PlayerState.Idle:
+                {
                     HandleIdleState();
                     break;
+                }
                 case PlayerState.Moving:
+                {
                     HandleMovingState();
                     break;
+                }
                 case PlayerState.Dead:
                     break;
                 default:
@@ -72,6 +77,7 @@ namespace Player
         private void HandleIdleState()
         {
             // ユーザー入力に基づいて目標地点を設定
+            // 1行動ずつ取りたいのでGetAxisRawを使う
             var moveX = Input.GetAxisRaw("Horizontal");
             var moveY = Input.GetAxisRaw("Vertical");
             Vector3 input = new Vector3(moveX, moveY, 0);
@@ -81,9 +87,6 @@ namespace Player
             {
                 // 移動方向をグリッドに合わせる
                 SetTargetPosition(input);
-
-                // 移動状態に遷移
-                _currentState = PlayerState.Moving;
             }
         }
 
@@ -95,7 +98,20 @@ namespace Player
         {
             // 移動方向をグリッドに合わせる
             Vector3 direction = input.normalized;
-            _targetPosition = transform.position + direction * gridSize;
+            
+            // 移動先が壁でないかチェック
+            Vector3 proposedPosition = transform.position + direction * gridSize;
+            Vector2Int nextPosition = new Vector2Int(
+                Mathf.RoundToInt(proposedPosition.x),
+                Mathf.RoundToInt(proposedPosition.y));
+            
+            // 壁でなければ移動
+            if (!GridManager.Instance.IsWall(nextPosition.x, nextPosition.y))
+            {
+                _targetPosition = proposedPosition;
+                // 移動状態に遷移
+                _currentState = PlayerState.Moving;
+            }
         }
     }
 }
