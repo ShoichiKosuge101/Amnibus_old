@@ -1,7 +1,7 @@
 using System;
-using Constants;
 using UniRx;
 using UnityEngine;
+using Utils;
 
 namespace Base
 {
@@ -30,7 +30,7 @@ namespace Base
         public void HandleError(Exception exception)
         {
             // エラー処理
-            Debug.LogError("Error Occurred: " + exception.Message);
+            UnityEngine.Debug.LogError("Error Occurred: " + exception.Message);
         }
     }
 }
