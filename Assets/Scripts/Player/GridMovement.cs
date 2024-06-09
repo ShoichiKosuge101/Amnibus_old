@@ -1,4 +1,5 @@
 using System;
+using Constants;
 using Manager;
 using UnityEngine;
 
@@ -33,6 +34,12 @@ namespace Player
         /// </summary>
         private void Update()
         {
+            // ゲームがポーズ中は何もしない
+            if (!GameManager.Instance.IsPlaying)
+            {
+                return;
+            }
+            
             switch (_currentState)
             {
                 case PlayerState.Idle:

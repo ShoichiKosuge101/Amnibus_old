@@ -1,4 +1,5 @@
-using Map;
+using Base;
+using Constants;
 using UnityEngine;
 
 namespace Manager
@@ -10,10 +11,18 @@ namespace Manager
         : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
-        
-        public GameObject playerPrefab;
-        private GameObject playerInstance;
 
+        /// <summary>
+        /// プレイヤーのインスタンス
+        /// </summary>
+        private GameObject _playerInstance;
+
+        /// <summary>
+        /// 現在のゲームの状態
+        /// </summary>
+        public MainGameStatus CurrentGameStatus { get; private set; } = MainGameStatus.Playing;
+        public bool IsPlaying => CurrentGameStatus == MainGameStatus.Playing;
+        
         /// <summary>
         /// 開始
         /// </summary>
@@ -36,23 +45,59 @@ namespace Manager
         /// </summary>
         private void Start()
         {
+            InitializeGame();
+            
             // GridManagerの初期化
             GridManager.Instance.Initialize();
-            
-            // MapGeneratorの初期化
-            MapGenerator.Instance.GenerateMap();
-            
-            // プレイヤーの生成
-            GeneratePlayer();
+        }
+
+        private void InitializeGame()
+        {
+            // ステージの加算ロード
+            // 最初のステージはStage1
+            SceneNavigator.Instance.LoadAdditiveScene("Scenes/Stage1");
         }
 
         /// <summary>
-        /// プレイヤーの生成
+        /// ポーズ中かどうかを設定
         /// </summary>
-        private void GeneratePlayer()
+        /// <param name="status"></param>
+        public void SetGameState(MainGameStatus status)
         {
-            Vector3 spawnPosition = new Vector3(1, 1, 0);
-            playerInstance = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            CurrentGameStatus = status;
+        }
+        
+        /// <summary>
+        /// プレイヤーのインスタンスを設定
+        /// </summary>
+        /// <param name="playerInstance"></param>
+        public void SetPlayerInstance(GameObject playerInstance)
+        {
+            _playerInstance = playerInstance;
+        }
+        
+        /// <summary>
+        /// プレイヤーのインスタンスを取得
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetPlayerInstance()
+        {
+            return _playerInstance;
+        }
+
+        /// <summary>
+        /// クリーンアップ
+        /// </summary>
+        public void Cleanup()
+        {
+            // GridManagerのクリーンアップ
+            GridManager.Instance.Cleanup();
+            
+            // シーンの破棄
+            SceneNavigator.Instance.UnloadAdditiveScene("Scenes/Stage1");
+            
+            // 自身のリセット
+            Instance = null;
         }
     }
 }
