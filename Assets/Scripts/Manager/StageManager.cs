@@ -83,12 +83,12 @@ namespace Manager
         {
             // GridManagerの初期化
             GridManager.Instance.Initialize();
-            
-            // Map生成
-            GenerateMap();
-            
+
             // ゴールの生成
             GenerateGoal();
+
+            // Map生成
+            GenerateMap();
             
             // プレイヤーの生成
             GeneratePlayer();
@@ -102,14 +102,12 @@ namespace Manager
             int goalX, goalY;
             do
             {
-                goalX = Random.Range(0, stageData.width);
-                goalY = Random.Range(0, stageData.height);
-            } while (GridManager.Instance.IsWall(goalX, goalY));
+                goalX = Random.Range(1, stageData.width - 1);
+                goalY = Random.Range(1, stageData.height - 1);
+            } while (GridManager.Instance.IsWall(goalX, goalY) || IsMapEdge(goalX, goalY));
             
-            Vector3 goalPosition = new Vector3(goalX * tileSize, goalY * tileSize, 0);
-            Instantiate(goalPrefab, goalPosition, Quaternion.identity);
-            
-            UnityEngine.Debug.Log("ゴールはここ!: " + goalPosition);
+            _goalPosition = new Vector3(goalX * tileSize, goalY * tileSize, 0);
+            Instantiate(goalPrefab, _goalPosition, Quaternion.identity);
         }
 
         /// <summary>
@@ -121,17 +119,26 @@ namespace Manager
             {
                 for (int j = 0; j < stageData.height; j++)
                 {
-                    // マップの端なら壁、それ以外なら床か壁をランダムで生成
-                    var randomTile = IsMapEdge(i, j) 
-                        ? wallPrefab 
-                        : GetRandomTile();
+                    GameObject tileObj;
+                    // ゴールの位置に壁を生成しない
+                    if (new Vector3(i * tileSize, j * tileSize, 0) == _goalPosition)
+                    {
+                        tileObj = floorPrefab;
+                    }
+                    else
+                    {
+                        // マップの端なら壁、それ以外なら床か壁をランダムで生成
+                        tileObj = IsMapEdge(i, j) 
+                            ? wallPrefab 
+                            : GetRandomTile();
+                    }
                     
                     Vector3 position = new Vector3(i * tileSize, j * tileSize,0);
-                    var tile = Instantiate(randomTile, position, Quaternion.identity);
+                    var tile = Instantiate(tileObj, position, Quaternion.identity);
                     tile.transform.SetParent(transform);
                     
                     // GridManagerに壁の位置を登録
-                    if (randomTile == wallPrefab)
+                    if (tileObj == wallPrefab)
                     {
                         GridManager.Instance.PlaceWall(i, j);
                     }
