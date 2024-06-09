@@ -258,14 +258,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b2c86b89aa4d1099cd4d89f960d748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageData: {fileID: 11400000, guid: a374428e60f4ce84aa87e122d73011b8, type: 2}
-  playerPrefab: {fileID: 8687653725495803349, guid: 0c6e76d20cb16e244bd3460e46a9658b,
+  stageData: {fileID: 11400000, guid: 5f49641043bed7c41bd2def1f2adc3dd, type: 2}
+  playerPrefab: {fileID: 8687653725495803349, guid: 0bd190e8ca5de20409d6c4d349f650be,
     type: 3}
-  floorPrefab: {fileID: 783841039167818109, guid: a68ee6fa420f32546a0cf33bd62329c6,
+  floorPrefab: {fileID: 783841039167818109, guid: d1b8a9d5098bf4741a9a8e3939deafab,
     type: 3}
-  wallPrefab: {fileID: 1066069425026040295, guid: 5ec6b3d277e724846a10ab9e21a89699,
+  wallPrefab: {fileID: 1066069425026040295, guid: 84ceb6aa602644f4e91cfa999a30edc1,
     type: 3}
-  goalPrefab: {fileID: 783841039167818109, guid: 71a9768d5fcec934cae01d38b8cb9a43,
+  goalPrefab: {fileID: 783841039167818109, guid: 771859cc3a582d84588526fab080d875,
     type: 3}
   tileSize: 1
 --- !u!1660057539 &9223372036854775807

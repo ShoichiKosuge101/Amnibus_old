@@ -35,7 +35,8 @@ namespace Player
         private void Update()
         {
             // ゲームがポーズ中は何もしない
-            if (!GameManager.Instance.IsPlaying)
+            if (GameManager.Instance == null 
+                || !GameManager.Instance.IsPlaying)
             {
                 return;
             }
@@ -75,7 +76,22 @@ namespace Player
             {
                 transform.position = SnapToGrid(_targetPosition);
                 _currentState = PlayerState.Idle;
+                
+                // ゴール判定
+                if (IsGoalReached())
+                {
+                    GameManager.Instance.OnGoalReached();
+                }
             }
+        }
+
+        /// <summary>
+        /// ゴールに到達したか
+        /// </summary>
+        /// <returns></returns>
+        private bool IsGoalReached()
+        {
+            return transform.position == GameManager.Instance.GetGoalPosition();
         }
 
         /// <summary>

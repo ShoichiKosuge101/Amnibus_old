@@ -13,14 +13,14 @@ TagManager:
   - UI
   - 
   - Character
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Goal
+  - 
   - Map
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - 
   - 
   - 
@@ -44,11 +44,14 @@ TagManager:
   - name: Character
     uniqueID: 1914376833
     locked: 0
-  - name: Map
+  - name: Goal
     uniqueID: 4231524897
     locked: 0
-  - name: Background
+  - name: Map
     uniqueID: 256627095
+    locked: 0
+  - name: Background
+    uniqueID: 2645103945
     locked: 0
   m_RenderingLayers:
   - Default

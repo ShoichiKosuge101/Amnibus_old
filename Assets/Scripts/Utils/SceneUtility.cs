@@ -19,6 +19,7 @@ namespace Utils
                 SceneName.Title    => "Scenes/Title",
                 SceneName.MainGame => "Scenes/MainGame",
                 SceneName.Stage1   => "Scenes/Stage1",
+                SceneName.Stage2   => "Scenes/Stage2",
                 _                  => null,
             };
         }
