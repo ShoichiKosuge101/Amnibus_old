@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using Base;
 using Constants;
 using UnityEngine;
-using Utils;
+using UnityEngine.SceneManagement;
+using SceneUtility = Utils.SceneUtility;
 
 namespace Manager
 {
@@ -86,6 +88,43 @@ namespace Manager
         }
 
         /// <summary>
+        /// 次のステージをロード
+        /// </summary>
+        /// <param name="nextStage"></param>
+        /// <returns></returns>
+        private IEnumerator LoadNextStage(SceneName nextStage)
+        {
+            // 現在のステージをアンロード
+            AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(SceneUtility.GetScenePath(_currentScene));
+            while (unloadOperation == null 
+                   || !unloadOperation.isDone)
+            {
+                yield return null;
+            }
+            
+            // 次のステージをロード
+            _currentScene = nextStage;
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(SceneUtility.GetScenePath(nextStage), LoadSceneMode.Additive);
+            while (loadOperation == null 
+                   || !loadOperation.isDone)
+            {
+                yield return null;
+            }
+            
+            // 新しいシーンの初期化を待つ
+            yield return new WaitForEndOfFrame();
+        }
+
+        private void DestroyCurrentSceneObject()
+        {
+            // プレイヤーとゴールを削除
+            if (_playerInstance != null)
+            {
+                Destroy(_playerInstance);
+            }
+        }
+
+        /// <summary>
         /// ポーズ中かどうかを設定
         /// </summary>
         /// <param name="status"></param>
@@ -134,8 +173,8 @@ namespace Manager
         {
             if (HasNextStage())
             {
-                _currentScene++;
-                LoadCurrentStage();
+                var nextStage = GetNextStage();
+                StartCoroutine(LoadNextStage(nextStage));
             }
             else
             {
@@ -152,7 +191,29 @@ namespace Manager
         /// <returns></returns>
         private bool HasNextStage()
         {
-            return Enum.GetValues(typeof(SceneName)).Length > (int)_currentScene + 1;
+            var values = (SceneName[])Enum.GetValues(typeof(SceneName));
+            int currentIndex = Array.IndexOf(values, _currentScene);
+            return currentIndex< values.Length - 1;
+        }
+        
+        /// <summary>
+        /// 現在のステージを取得
+        /// </summary>
+        /// <returns></returns>
+        public SceneName GetCurrentScene()
+        {
+            return _currentScene;
+        }
+
+        /// <summary>
+        /// 次のステージを取得
+        /// </summary>
+        /// <returns></returns>
+        private SceneName GetNextStage()
+        {
+            var values = (SceneName[])Enum.GetValues(typeof(SceneName));
+            int currentIndex = Array.IndexOf(values, _currentScene);
+            return values[currentIndex + 1];
         }
 
         /// <summary>

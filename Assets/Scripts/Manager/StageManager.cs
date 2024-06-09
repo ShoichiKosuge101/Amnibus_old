@@ -1,7 +1,9 @@
 using Map;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using SceneUtility = Utils.SceneUtility;
 
 namespace Manager
 {
@@ -108,19 +110,14 @@ namespace Manager
             } while (GridManager.Instance.IsWall(goalX, goalY) || IsMapEdge(goalX, goalY));
             
             _goalPosition = new Vector3(goalX * tileSize, goalY * tileSize, 0);
-            Instantiate(goalPrefab, _goalPosition, Quaternion.identity);
+            
+            // ゴールを加算シーンに属する様に生成
+            var goalScene = SceneManager.GetSceneByName(SceneUtility.GetScenePath(GameManager.Instance.GetCurrentScene()));
+            var goalInstance = Instantiate(goalPrefab, _goalPosition, Quaternion.identity);
+            SceneManager.MoveGameObjectToScene(goalInstance, goalScene);
             
             // ゴールの位置を設定
             GameManager.Instance.SetGoalPosition(_goalPosition);
-        }
-        
-        /// <summary>
-        /// ゴールの位置を取得
-        /// </summary>
-        /// <returns></returns>
-        public Vector3 GetGoalPosition()
-        {
-            return _goalPosition;
         }
 
         /// <summary>
@@ -205,7 +202,10 @@ namespace Manager
                 spawnPosition = new Vector3(playerX * tileSize, playerY * tileSize, 0);
             }
             
+            // プレイヤーを加算シーンに属する様に生成
+            var playerScene = SceneManager.GetSceneByName(SceneUtility.GetScenePath(GameManager.Instance.GetCurrentScene()));
             var playerObj = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            SceneManager.MoveGameObjectToScene(playerObj, playerScene);
             
             // プレイヤーの設定
             GameManager.Instance.SetPlayerInstance(playerObj);
