@@ -35,7 +35,8 @@ namespace Player
         private void Update()
         {
             // ゲームがポーズ中は何もしない
-            if (!GameManager.Instance.IsPlaying)
+            if (GameManager.Instance == null 
+                || !GameManager.Instance.IsPlaying)
             {
                 return;
             }
