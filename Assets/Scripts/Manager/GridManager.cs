@@ -61,5 +61,17 @@ namespace Manager
         {
             return _walls.Contains(new Vector2Int(x, y));
         }
+
+        /// <summary>
+        /// クリーンアップ
+        /// </summary>
+        public void Cleanup()
+        {
+            // 壁の位置情報のクリア
+            _walls.Clear();
+            
+            // インスタンスのリセット
+            Instance = null;
+        }
     }
 }

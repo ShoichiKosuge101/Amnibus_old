@@ -60,7 +60,7 @@ namespace Base
         /// <param name="sceneName"></param>
         protected static void ChangeScene(SceneName sceneName)
         {
-            SceneNavigator.Instance.GoToScene(SceneUtility.GetScenePath(sceneName));
+            SceneNavigator.Instance.LoadScene(SceneUtility.GetScenePath(sceneName));
         }
         
         /// <summary>
