@@ -1,14 +1,7 @@
+using Constants;
+
 namespace Utils
 {
-    /// <summary>
-    /// シーン名
-    /// </summary>
-    public enum SceneName
-    {
-        Title,
-        MainGame,
-    }
-    
     /// <summary>
     /// シーンパスを取得するユーティリティ
     /// </summary>
@@ -25,6 +18,7 @@ namespace Utils
             {
                 SceneName.Title    => "Scenes/Title",
                 SceneName.MainGame => "Scenes/MainGame",
+                SceneName.Stage1   => "Scenes/Stage1",
                 _                  => null,
             };
         }

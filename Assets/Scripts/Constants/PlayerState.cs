@@ -1,4 +1,4 @@
-namespace Player
+namespace Constants
 {
     /// <summary>
     /// プレイヤーの状態

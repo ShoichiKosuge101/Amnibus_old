@@ -1,7 +1,7 @@
 using System;
+using Constants;
 using UniRx;
 using UnityEngine;
-using Utils;
 
 namespace Base
 {
