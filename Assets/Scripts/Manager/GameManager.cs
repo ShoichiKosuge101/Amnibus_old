@@ -1,6 +1,7 @@
 using Base;
 using Constants;
 using UnityEngine;
+using Utils;
 
 namespace Manager
 {
@@ -51,11 +52,15 @@ namespace Manager
             GridManager.Instance.Initialize();
         }
 
+        /// <summary>
+        /// ゲームの初期化
+        /// </summary>
         private void InitializeGame()
         {
             // ステージの加算ロード
             // 最初のステージはStage1
-            SceneNavigator.Instance.LoadAdditiveScene("Scenes/Stage1");
+            string scenePath = SceneUtility.GetScenePath(SceneName.Stage1);
+            SceneNavigator.Instance.LoadAdditiveScene(scenePath);
         }
 
         /// <summary>
@@ -94,7 +99,8 @@ namespace Manager
             GridManager.Instance.Cleanup();
             
             // シーンの破棄
-            SceneNavigator.Instance.UnloadAdditiveScene("Scenes/Stage1");
+            string scenePath = SceneUtility.GetScenePath(SceneName.Stage1);
+            SceneNavigator.Instance.UnloadAdditiveScene(scenePath);
             
             // 自身のリセット
             Instance = null;

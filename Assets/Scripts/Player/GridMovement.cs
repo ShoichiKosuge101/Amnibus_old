@@ -73,9 +73,23 @@ namespace Player
             // 目標地点に到達したら待機状態に遷移
             if (transform.position == _targetPosition)
             {
-                transform.position = _targetPosition;
+                transform.position = SnapToGrid(_targetPosition);
                 _currentState = PlayerState.Idle;
             }
+        }
+
+        /// <summary>
+        /// グリッドにスナップ
+        /// </summary>
+        /// <param name="targetPosition"></param>
+        /// <returns></returns>
+        private Vector3 SnapToGrid(Vector3 targetPosition)
+        {
+            return new Vector3(
+                Mathf.RoundToInt(targetPosition.x / gridSize) * gridSize,
+                Mathf.RoundToInt(targetPosition.y / gridSize) * gridSize,
+                targetPosition.z
+                );
         }
 
         /// <summary>

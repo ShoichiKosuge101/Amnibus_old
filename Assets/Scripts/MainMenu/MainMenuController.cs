@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace MainMenu
 {
+    /// <summary>
+    /// メインメニューコントローラー
+    /// </summary>
     public class MainMenuController
         : MonoBehaviour
     {

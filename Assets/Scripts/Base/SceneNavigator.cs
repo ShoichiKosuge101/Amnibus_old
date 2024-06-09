@@ -78,6 +78,5 @@ namespace Base
                 GameManager.Instance.Cleanup();
             }
         }
-        
     }
 }
