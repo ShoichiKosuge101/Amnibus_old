@@ -1,5 +1,4 @@
 using Map;
-using Player;
 using UnityEngine;
 
 namespace Manager
@@ -10,8 +9,6 @@ namespace Manager
     public class StageManager
         : MonoBehaviour
     {
-        public static StageManager Instance { get; private set; }
-        
         public GameObject playerPrefab;
         public GameObject floorPrefab;
         public GameObject wallPrefab;
@@ -22,30 +19,52 @@ namespace Manager
         /// ステージデータ
         /// </summary>
         public StageData stageData;
-
-        /// <summary>
-        /// 開始
-        /// </summary>
-        private void Awake()
-        {
-            // シングルトン
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
+        
+        private Camera _mainCamera;
+        
         /// <summary>
         /// 開始
         /// </summary>
         private void Start()
         {
+            _mainCamera = Camera.main;
+            if(_mainCamera == null)
+            {
+                UnityEngine.Debug.LogError("Main Camera is missing");
+                return;
+            }
+            
             // ステージの初期化
             InitializeStage();
+            
+            // カメラの位置を調整
+            AdjustCameraPosition();
+        }
+
+        /// <summary>
+        /// カメラの位置を調整
+        /// </summary>
+        private void AdjustCameraPosition()
+        {
+            // ステージの中心を計算
+            float stageCenterX = stageData?.width * tileSize / 2 ?? 0;
+            float stageCenterY = stageData?.height * tileSize / 2 ?? 0;
+            Vector3 stageCenter = new Vector3(stageCenterX, stageCenterY, -10f);
+            
+            // カメラの位置をステージの中心に設定
+            _mainCamera.transform.position = new Vector3(
+                stageCenter.x, 
+                stageCenter.y, 
+                _mainCamera.transform.position.z);
+            
+            // カメラのサイズをステージの大きさに合わせる
+            float aspectRatio = _mainCamera.aspect;
+            float verticalSize = stageData?.height ?? 0 * tileSize / 2;
+            float horizontalSize = stageData?.width ?? 0 * tileSize / (2 * aspectRatio);
+
+            // 縦横両方のサイズを比較して大きい方を採用
+            const float padding = 0.8f;
+            _mainCamera.orthographicSize = Mathf.Max(verticalSize, horizontalSize) * padding;
         }
 
         /// <summary>
@@ -85,9 +104,6 @@ namespace Manager
                     }
                 }
             }
-            
-            // プレイヤーの生成
-            GeneratePlayer();
         }
         
         /// <summary>
