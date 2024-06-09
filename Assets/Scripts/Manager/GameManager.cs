@@ -1,3 +1,4 @@
+using System;
 using Base;
 using Constants;
 using UnityEngine;
@@ -19,11 +20,22 @@ namespace Manager
         private GameObject _playerInstance;
 
         /// <summary>
+        /// ゴールの位置
+        /// </summary>
+        private Vector3 _goalPosition;
+
+        /// <summary>
         /// 現在のゲームの状態
         /// </summary>
         public MainGameStatus CurrentGameStatus { get; private set; } = MainGameStatus.Playing;
         public bool IsPlaying => CurrentGameStatus == MainGameStatus.Playing;
         
+        /// <summary>
+        /// 現在のシーン
+        /// enumの値をステージの進行として扱う
+        /// </summary>
+        private SceneName _currentScene;
+
         /// <summary>
         /// 開始
         /// </summary>
@@ -57,9 +69,19 @@ namespace Manager
         /// </summary>
         private void InitializeGame()
         {
-            // ステージの加算ロード
             // 最初のステージはStage1
-            string scenePath = SceneUtility.GetScenePath(SceneName.Stage1);
+            _currentScene = SceneName.Stage1;
+            
+            // ステージの加算シーンロード
+            LoadCurrentStage();
+        }
+
+        /// <summary>
+        /// 現在のステージをロード
+        /// </summary>
+        private void LoadCurrentStage()
+        {
+            string scenePath = SceneUtility.GetScenePath(_currentScene);
             SceneNavigator.Instance.LoadAdditiveScene(scenePath);
         }
 
@@ -89,6 +111,57 @@ namespace Manager
         {
             return _playerInstance;
         }
+        
+        /// <summary>
+        /// ゴールの位置を設定
+        /// </summary>
+        /// <param name="position"></param>
+        public void SetGoalPosition(Vector3 position)
+        {
+            _goalPosition = position;
+        }
+
+        /// <summary>
+        /// ゴールの位置を取得
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetGoalPosition()
+        {
+            return _goalPosition;
+        }
+
+        public void OnGoalReached()
+        {
+            if (HasNextStage())
+            {
+                _currentScene++;
+                LoadCurrentStage();
+            }
+            else
+            {
+                SetGameState(MainGameStatus.Win);
+                
+                // タイトルへ遷移
+                GotoTitle();
+            }
+        }
+        
+        /// <summary>
+        /// 次のステージが存在するかチェック
+        /// </summary>
+        /// <returns></returns>
+        private bool HasNextStage()
+        {
+            return Enum.GetValues(typeof(SceneName)).Length > (int)_currentScene + 1;
+        }
+
+        /// <summary>
+        /// タイトルへ遷移
+        /// </summary>
+        private void GotoTitle()
+        {
+            SceneNavigator.Instance.LoadScene(SceneUtility.GetScenePath(SceneName.Title));
+        }
 
         /// <summary>
         /// クリーンアップ
@@ -99,7 +172,7 @@ namespace Manager
             GridManager.Instance.Cleanup();
             
             // シーンの破棄
-            string scenePath = SceneUtility.GetScenePath(SceneName.Stage1);
+            string scenePath = SceneUtility.GetScenePath(_currentScene);
             SceneNavigator.Instance.UnloadAdditiveScene(scenePath);
             
             // 自身のリセット

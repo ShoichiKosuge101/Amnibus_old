@@ -1,6 +1,7 @@
 using Map;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 namespace Manager
 {
@@ -23,7 +24,7 @@ namespace Manager
         public float tileSize = 1.0f;
         
         private Camera _mainCamera;
-
+        
         /// <summary>
         /// ゴールの位置
         /// </summary>
@@ -108,6 +109,18 @@ namespace Manager
             
             _goalPosition = new Vector3(goalX * tileSize, goalY * tileSize, 0);
             Instantiate(goalPrefab, _goalPosition, Quaternion.identity);
+            
+            // ゴールの位置を設定
+            GameManager.Instance.SetGoalPosition(_goalPosition);
+        }
+        
+        /// <summary>
+        /// ゴールの位置を取得
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetGoalPosition()
+        {
+            return _goalPosition;
         }
 
         /// <summary>

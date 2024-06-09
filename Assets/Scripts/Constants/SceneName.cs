@@ -5,8 +5,8 @@ namespace Constants
     /// </summary>
     public enum SceneName
     {
-        Title,
-        MainGame,
-        Stage1,
+        Title    = 0,
+        MainGame = 1,
+        Stage1   = 2,
     }
 }
