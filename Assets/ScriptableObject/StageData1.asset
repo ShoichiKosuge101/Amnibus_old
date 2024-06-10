@@ -14,3 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 10
   height: 10
+  floorPrefab: {fileID: 783841039167818109, guid: a68ee6fa420f32546a0cf33bd62329c6,
+    type: 3}
+  wallPrefab: {fileID: 1066069425026040295, guid: 5ec6b3d277e724846a10ab9e21a89699,
+    type: 3}
+  goalPrefab: {fileID: 783841039167818109, guid: 71a9768d5fcec934cae01d38b8cb9a43,
+    type: 3}
+  playerPrefab: {fileID: 8687653725495803349, guid: 0c6e76d20cb16e244bd3460e46a9658b,
+    type: 3}
+  enemies:
+  - {fileID: 11400000, guid: 5d34461cdb69ef64f88f5f50108e8aa0, type: 2}

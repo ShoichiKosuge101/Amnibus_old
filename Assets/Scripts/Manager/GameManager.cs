@@ -17,6 +17,11 @@ namespace Manager
         public static GameManager Instance { get; private set; }
 
         /// <summary>
+        /// プレイヤーのプレハブ
+        /// </summary>
+        public GameObject playerPrefab;
+
+        /// <summary>
         /// プレイヤーのインスタンス
         /// </summary>
         private GameObject _playerInstance;

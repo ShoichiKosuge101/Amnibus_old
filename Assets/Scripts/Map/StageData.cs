@@ -1,3 +1,4 @@
+using Enemy;
 using UnityEngine;
 
 namespace Map
@@ -11,5 +12,11 @@ namespace Map
         /// </summary>
         public int width;
         public int height;
+
+        public GameObject floorPrefab;
+        public GameObject wallPrefab;
+        public GameObject goalPrefab;
+        
+        public EnemyData[] enemies;
     }
 }
