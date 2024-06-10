@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cba3cde9cbc74f6981eac59cb436dadf, type: 3}
-  m_Name: StageData1
+  m_Name: StageData3
   m_EditorClassIdentifier: 
-  width: 10
-  height: 10
+  width: 20
+  height: 20
   floorPrefab: {fileID: 783841039167818109, guid: a68ee6fa420f32546a0cf33bd62329c6,
     type: 3}
   wallPrefab: {fileID: 1066069425026040295, guid: 5ec6b3d277e724846a10ab9e21a89699,
@@ -24,3 +24,5 @@ MonoBehaviour:
     type: 3}
   enemies:
   - {fileID: 11400000, guid: 5d34461cdb69ef64f88f5f50108e8aa0, type: 2}
+  - {fileID: 11400000, guid: b15e532868976f94289d23a9030c26b9, type: 2}
+  - {fileID: 11400000, guid: 6f528fdbe72fba24cab260276ee89ec3, type: 2}

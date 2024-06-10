@@ -1,3 +1,4 @@
+using Enemy;
 using Map;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -17,11 +18,6 @@ namespace Manager
         /// ステージデータ
         /// </summary>
         public StageData stageData;
-        
-        public GameObject playerPrefab;
-        public GameObject floorPrefab;
-        public GameObject wallPrefab;
-        public GameObject goalPrefab;
         
         public float tileSize = 1.0f;
         
@@ -95,6 +91,9 @@ namespace Manager
             
             // プレイヤーの生成
             GeneratePlayer();
+            
+            // 敵の生成
+            GenerateEnemies();
         }
 
         /// <summary>
@@ -113,7 +112,7 @@ namespace Manager
             
             // ゴールを加算シーンに属する様に生成
             var goalScene = SceneManager.GetSceneByName(SceneUtility.GetScenePath(GameManager.Instance.GetCurrentScene()));
-            var goalInstance = Instantiate(goalPrefab, _goalPosition, Quaternion.identity);
+            var goalInstance = Instantiate(stageData.goalPrefab, _goalPosition, Quaternion.identity);
             SceneManager.MoveGameObjectToScene(goalInstance, goalScene);
             
             // ゴールの位置を設定
@@ -133,13 +132,13 @@ namespace Manager
                     // ゴールの位置に壁を生成しない
                     if (new Vector3(i * tileSize, j * tileSize, 0) == _goalPosition)
                     {
-                        tileObj = floorPrefab;
+                        tileObj = stageData.floorPrefab;
                     }
                     else
                     {
                         // マップの端なら壁、それ以外なら床か壁をランダムで生成
                         tileObj = IsMapEdge(i, j) 
-                            ? wallPrefab 
+                            ? stageData.wallPrefab 
                             : GetRandomTile();
                     }
                     
@@ -148,7 +147,7 @@ namespace Manager
                     tile.transform.SetParent(transform);
                     
                     // GridManagerに壁の位置を登録
-                    if (tileObj == wallPrefab)
+                    if (tileObj == stageData.wallPrefab)
                     {
                         GridManager.Instance.PlaceWall(i, j);
                     }
@@ -204,11 +203,86 @@ namespace Manager
             
             // プレイヤーを加算シーンに属する様に生成
             var playerScene = SceneManager.GetSceneByName(SceneUtility.GetScenePath(GameManager.Instance.GetCurrentScene()));
-            var playerObj = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            var playerObj = Instantiate(GameManager.Instance.playerPrefab, spawnPosition, Quaternion.identity);
             SceneManager.MoveGameObjectToScene(playerObj, playerScene);
             
             // プレイヤーの設定
             GameManager.Instance.SetPlayerInstance(playerObj);
+        }
+
+        /// <summary>
+        /// 敵の生成
+        /// </summary>
+        private void GenerateEnemies()
+        {
+            foreach (var enemyData in stageData.enemies)
+            {
+                int enemyCount = Random.Range(1, 5);
+                for(int enemyIndex = 0; enemyIndex < enemyCount; enemyIndex++)
+                {
+                    // 敵の位置をランダムで決める。壁とマップ端と、ゴール上と、プレイヤーの上を避けること
+                    Vector3 enemyPosition = GetRandomEnemySpawnPosition();
+                    
+                    // 敵を加算シーンに属する様に生成
+                    var enemyScene = SceneManager.GetSceneByName(SceneUtility.GetScenePath(GameManager.Instance.GetCurrentScene()));
+                    var enemyInstance = Instantiate(enemyData.enemyPrefab, enemyPosition, Quaternion.identity);
+                    SceneManager.MoveGameObjectToScene(enemyInstance, enemyScene);
+                    
+                    // 敵の設定
+                    var enemy = enemyInstance.GetComponent<EnemyBase>();
+                    if (enemy != null)
+                    {
+                        enemy.Initialize(enemyData);
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 生成位置を壁を避けて、ゴールとプレイヤーを避けてランダムで取得
+        /// </summary>
+        /// <returns></returns>
+        private Vector3 GetRandomEnemySpawnPosition()
+        {
+            Vector3 playerPosition = GameManager.Instance.GetPlayerInstance().transform.position;
+            // 敵の位置をランダムで決める。壁とマップ端と、ゴール上と、プレイヤーの上を避けること
+            Vector3 enemyPosition;
+            // 壁の位置を避けたランダムな位置を取得
+            do 
+            {
+                enemyPosition = GetRandomPosition();
+            } while (enemyPosition == _goalPosition 
+                     || enemyPosition == playerPosition);
+            
+            return enemyPosition;
+        }
+        
+        /// <summary>
+        /// ランダムな位置を取得
+        /// </summary>
+        /// <returns></returns>
+        private Vector3 GetRandomPosition()
+        {
+            // 壁に被らないようにランダムな位置を取得
+            Vector3 randomPosition;
+            do
+            {
+                randomPosition = GetRandomVector3();
+            } while (GridManager.Instance.IsWall((int)randomPosition.x, (int)randomPosition.y));
+            
+            return randomPosition;
+        }
+        
+        /// <summary>
+        /// ランダムなVector3を取得
+        /// </summary>
+        /// <returns></returns>
+        private Vector3 GetRandomVector3()
+        {
+            return new Vector3(
+                Random.Range(1, stageData.width - 1) * tileSize, 
+                Random.Range(1, stageData.height - 1) * tileSize, 
+                0);
         }
         
         /// <summary>
@@ -220,8 +294,8 @@ namespace Manager
             const float threshold = 0.8f;
             
             return Random.value > threshold
-                ? wallPrefab 
-                : floorPrefab;
+                ? stageData.wallPrefab 
+                : stageData.floorPrefab;
         }
     }
 }

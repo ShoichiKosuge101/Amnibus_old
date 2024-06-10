@@ -9,5 +9,6 @@ namespace Constants
         MainGame = 1,
         Stage1   = 2,
         Stage2   = 3,
+        Stage3   = 4,
     }
 }
