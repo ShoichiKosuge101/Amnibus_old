@@ -120,15 +120,6 @@ namespace Manager
             yield return new WaitForEndOfFrame();
         }
 
-        private void DestroyCurrentSceneObject()
-        {
-            // プレイヤーとゴールを削除
-            if (_playerInstance != null)
-            {
-                Destroy(_playerInstance);
-            }
-        }
-
         /// <summary>
         /// ポーズ中かどうかを設定
         /// </summary>

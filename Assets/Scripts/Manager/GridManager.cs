@@ -15,6 +15,11 @@ namespace Manager
         /// 壁の位置情報
         /// </summary>
         private readonly HashSet<Vector2Int> _walls = new HashSet<Vector2Int>();
+        
+        /// <summary>
+        /// 敵の位置情報
+        /// </summary>
+        private readonly HashSet<Vector2Int> _enemies = new HashSet<Vector2Int>();
 
         /// <summary>
         /// 開始
@@ -60,6 +65,50 @@ namespace Manager
         public bool IsWall(int x, int y)
         {
             return _walls.Contains(new Vector2Int(x, y));
+        }
+        
+        /// <summary>
+        /// 敵の配置
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void PlaceEnemy(int x, int y)
+        {
+            // 敵の配置
+            _enemies.Add(new Vector2Int(x, y));
+        }
+        
+        /// <summary>
+        /// 敵の削除
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void RemoveEnemy(int x, int y)
+        {
+            // 敵の削除
+            _enemies.Remove(new Vector2Int(x, y));
+        }
+        
+        /// <summary>
+        /// 敵かどうか
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool IsEnemy(int x, int y)
+        {
+            return _enemies.Contains(new Vector2Int(x, y));
+        }
+        
+        /// <summary>
+        /// 占有されているか
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool IsOccupied(int x, int y)
+        {
+            return IsWall(x, y) || IsEnemy(x, y);
         }
 
         /// <summary>
