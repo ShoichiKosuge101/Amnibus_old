@@ -93,6 +93,24 @@ namespace Player
         {
             return transform.position == GameManager.Instance.GetGoalPosition();
         }
+        
+        /// <summary>
+        /// 敵との衝突判定
+        /// </summary>
+        /// <returns></returns>
+        private bool IsEnemyCollision()
+        {
+            var prevPosition = SnapToGrid(transform.position);
+            return GridManager.Instance.IsEnemy((int)prevPosition.x, (int)prevPosition.y);
+        }
+
+        /// <summary>
+        /// 敵との衝突処理
+        /// </summary>
+        private void HandleEnemyCollision()
+        {
+            UnityEngine.Debug.Log("敵と衝突しました");
+        }
 
         /// <summary>
         /// グリッドにスナップ
@@ -142,8 +160,8 @@ namespace Player
                 Mathf.RoundToInt(proposedPosition.x),
                 Mathf.RoundToInt(proposedPosition.y));
             
-            // 壁でなければ移動
-            if (!GridManager.Instance.IsWall(nextPosition.x, nextPosition.y))
+            // 壁か敵でなければ移動
+            if (!GridManager.Instance.IsOccupied(nextPosition.x, nextPosition.y))
             {
                 _targetPosition = proposedPosition;
                 // 移動状態に遷移
